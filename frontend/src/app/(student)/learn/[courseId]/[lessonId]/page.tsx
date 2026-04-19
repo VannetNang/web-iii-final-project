@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getCourse, Course, Lesson } from '@/lib/courses';
 import { toast } from 'sonner';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
