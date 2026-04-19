@@ -10,9 +10,7 @@
     "skipDefaultLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
-    "noEmitOnError": false,
-    "typeRoots": ["./node_modules/@types"],
-    "types": ["node", "express"]
+    "noEmitOnError": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
