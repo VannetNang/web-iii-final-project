@@ -37,7 +37,6 @@ lessonRouter.delete(
   '/:id',
   userAuthorize,
   adminOnly,
-  validateBody(lessonParamSchema),
   destroy,
 );
 
