@@ -221,7 +221,7 @@ export default function EditCoursePage() {
                   <Input {...lessonForm.register('title')} placeholder="e.g. Introduction" />
                   {lessonForm.formState.errors.title && (
                     <p className="text-sm text-red-500">{lessonForm.formState.errors.title.message}</p>
-                  )
+                  )}
                 </div>
                 <div className="space-y-1">
                   <Label>Description (optional)</Label>
