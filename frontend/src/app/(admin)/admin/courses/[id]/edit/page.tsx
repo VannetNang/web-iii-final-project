@@ -221,7 +221,7 @@ export default function EditCoursePage() {
                   <Input {...lessonForm.register('title')} placeholder="e.g. Introduction" />
                   {lessonForm.formState.errors.title && (
                     <p className="text-sm text-red-500">{lessonForm.formState.errors.title.message}</p>
-                  )}
+                  )
                 </div>
                 <div className="space-y-1">
                   <Label>Description (optional)</Label>
@@ -253,16 +253,9 @@ export default function EditCoursePage() {
                 <div className="space-y-1">
                   <span className="text-sm font-medium">{index + 1}. {lesson.title}</span>
                   {isValidUrl(lesson.videoUrl) && (
-                    <div>
-                      
-                        href={lesson.videoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-blue-500 hover:underline flex items-center gap-1"
-                      >
-                        <ExternalLink className="w-3 h-3" /> View current video
-                      </a>
-                    </div>
+                    <a href={lesson.videoUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline flex items-center gap-1">
+                      <ExternalLink className="w-3 h-3" /> View current video
+                    </a>
                   )}
                 </div>
                 <Button variant="destructive" size="sm" onClick={() => deleteLesson(lesson.id)}>
