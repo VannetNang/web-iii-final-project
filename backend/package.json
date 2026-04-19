@@ -21,7 +21,7 @@
     "@types/node": "^22.0.0",
     "@types/swagger-ui-express": "^4.1.8",
     "axios": "^1.9.0",
-    "bakong-khqr": "^1.2.1",
+    "bakong-khqr": "^1.0.20",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
