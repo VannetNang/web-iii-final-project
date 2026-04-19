@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "start": "node dist/server.js",
     "dev": "nodemon --watch \"src/**/*.ts\" --exec \"npx ts-node\" src/server.ts",
     "lint": "eslint \"src/**/*.ts\""
