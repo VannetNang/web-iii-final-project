@@ -188,14 +188,21 @@ export const createTransaction = async (
 
     // Else, apply discount logic first if that course has discount
     const discount = course.discountQuantity > 0 ? Number(course.discount) : 0;
-    const finalAmount = Math.round(Number(course.price) * (1 - discount / 100) * 100) / 100;
+    const finalAmount =
+      Math.round(Number(course.price) * (1 - discount / 100) * 100) / 100;
 
     // If free course, auto-enrol immediately
     if (finalAmount < 0.01) {
       const enrolment = await prisma.enrolment.upsert({
         where: { userId_courseId: { userId, courseId } },
         update: { status: 'success', priceAtSale: 0 },
-        create: { userId, courseId, status: 'success', priceAtSale: 0, progress: 0 },
+        create: {
+          userId,
+          courseId,
+          status: 'success',
+          priceAtSale: 0,
+          progress: 0,
+        },
       });
       return res.status(200).json({
         status: 'success',
@@ -510,10 +517,14 @@ export const getPurchasedCourses = async (
 };
 
 // GET /enrolments/all — Admin only
-export const getAllEnrolments = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllEnrolments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const enrolments = await prisma.enrolment.findMany({
-      orderBy: { enrolledAt: "desc" },
+      orderBy: { enrolledAt: 'desc' },
       include: {
         user: { select: { name: true, email: true } },
         course: { select: { title: true } },
@@ -530,7 +541,9 @@ export const getAllEnrolments = async (req: Request, res: Response, next: NextFu
       enrolledAt: e.enrolledAt,
     }));
 
-    res.status(200).json({ status: "success", message: "Enrolments fetched", data });
+    res
+      .status(200)
+      .json({ status: 'success', message: 'Enrolments fetched', data });
   } catch (err) {
     next(err);
   }

@@ -18,7 +18,7 @@ export const redisCache = async (
 
   // Check if already have cached data
   if (cachedData) {
-    return JSON.parse(cachedData);
+    return JSON.parse(cachedData as string);
   }
 
   // Else, cache new data
