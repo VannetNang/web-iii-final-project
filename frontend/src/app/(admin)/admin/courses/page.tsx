@@ -31,8 +31,13 @@ export default function AdminCoursesPage() {
       await api.delete(`/courses/${id}`);
       setCourses((prev) => prev.filter((c) => c.id !== id));
       toast.success('Course deleted');
-    } catch {
-      toast.error('Failed to delete course');
+    } catch (err: any) {
+      const msg = err.response?.data?.message || '';
+      if (msg.includes('foreign key') || msg.includes('constraint')) {
+        toast.error('Cannot delete — this course has enrolled students.');
+      } else {
+        toast.error(msg || 'Failed to delete course');
+      }
     }
   };
 
