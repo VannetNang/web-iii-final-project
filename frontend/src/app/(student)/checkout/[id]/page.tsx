@@ -17,6 +17,7 @@ export default function CheckoutPage() {
   const [status, setStatus] = useState<PaymentStatus>('idle');
   const [qrString, setQrString] = useState<string | null>(null);
   const [enrolmentId, setEnrolmentId] = useState<string | null>(null);
+  const [md5Hash, setMd5Hash] = useState<string | null>(null);
   const [isFree, setIsFree] = useState(false);
   const [loadingPrice, setLoadingPrice] = useState(true);
 
@@ -42,18 +43,19 @@ export default function CheckoutPage() {
       }
       setQrString(res.data.data.qr);
       setEnrolmentId(res.data.data.enrolmentId);
+      setMd5Hash(res.data.data.md5);
       setStatus('pending');
-      pollPayment(res.data.data.enrolmentId);
+      pollPayment(res.data.data.enrolmentId, res.data.data.md5);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to enrol');
       setStatus('idle');
     }
   };
 
-  const pollPayment = (eid: string) => {
+  const pollPayment = (eid: string, md5: string) => {
     const interval = setInterval(async () => {
       try {
-        const res = await api.post('/enrolments/checkout', { enrolmentId: eid });
+        const res = await api.post('/enrolments/checkout', { enrolmentId: eid, md5 });
         const paymentStatus = res.data.data?.status;
         if (paymentStatus === 'success') {
           clearInterval(interval);
