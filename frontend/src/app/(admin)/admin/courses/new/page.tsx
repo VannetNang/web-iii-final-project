@@ -1,6 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
@@ -18,13 +19,14 @@ const createCourseSchema = z.object({
   discount: z.coerce.number().min(0).max(100).default(0),
   discountQuantity: z.coerce.number().int().min(0).default(0),
   thumbnail: z.any().optional(),
+  thumbnailUrl: z.string().optional(),
 });
 
 type CreateCourseInput = z.infer<typeof createCourseSchema>;
 
 export default function NewCoursePage() {
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreateCourseInput>({
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<CreateCourseInput>({
     resolver: zodResolver(createCourseSchema) as any,
     defaultValues: {
       discount: 0,
@@ -42,6 +44,8 @@ export default function NewCoursePage() {
       formData.append('discountQuantity', String(data.discountQuantity ?? 0));
       if (data.thumbnail?.[0]) {
         formData.append('thumbnail', data.thumbnail[0]);
+      } else if (data.thumbnailUrl) {
+        formData.append('thumbnailUrl', data.thumbnailUrl);
       }
 
       await api.post('/courses', formData, {
@@ -105,6 +109,10 @@ export default function NewCoursePage() {
             <div className="space-y-1">
               <Label>Thumbnail</Label>
               <Input type="file" accept="image/*" {...register('thumbnail')} />
+              <div className="flex gap-2 items-center">
+                <Input type="url" placeholder="https://example.com/image.jpg" {...register('thumbnailUrl')} />
+                <Button type="button" variant="outline" size="sm" onClick={() => setValue('thumbnailUrl', '')}>Clear</Button>
+              </div>
             </div>
 
             <div className="flex gap-3 pt-2">

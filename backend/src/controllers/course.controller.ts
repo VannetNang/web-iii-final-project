@@ -302,7 +302,7 @@ export const store = async (
 ) => {
   try {
     const { title, description, price, discount, discountQuantity } = req.body;
-    const thumbnail = req.file?.path ?? "";
+    const thumbnail = req.file?.path ?? req.body.thumbnailUrl?.trim() ?? "";
 
     // Create new course
     const newCourse = await prisma.course.create({
@@ -448,7 +448,7 @@ export const update = async (
     const { title, description, price, discount, discountQuantity } = req.body;
 
     // if no file, keep the old one
-    const thumbnail = req.file?.path ?? "";
+    const thumbnail = req.file?.path ?? req.body.thumbnailUrl?.trim() ?? "";
 
     const updatedCourse = await prisma.course.update({
       where: { id: id },

@@ -24,6 +24,7 @@ const editCourseSchema = z.object({
   discount: z.coerce.number().min(0).max(100).optional(),
   discountQuantity: z.coerce.number().int().min(0).optional(),
   thumbnail: z.any().optional(),
+  thumbnailUrl: z.string().optional(),
 });
 
 const lessonSchema = z.object({
