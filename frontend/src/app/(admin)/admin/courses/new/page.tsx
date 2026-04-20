@@ -1,17 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { ThumbnailInput } from '@/components/courses/ThumbnailInput';
-import { ThumbnailInput } from '@/components/courses/ThumbnailInput';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ThumbnailInput } from '@/components/courses/ThumbnailInput';
 import api from '@/lib/api';
 
 const createCourseSchema = z.object({
@@ -20,8 +19,6 @@ const createCourseSchema = z.object({
   price: z.coerce.number().min(0, 'Price must be 0 or greater'),
   discount: z.coerce.number().min(0).max(100).default(0),
   discountQuantity: z.coerce.number().int().min(0).default(0),
-  thumbnail: z.any().optional(),
-  thumbnailUrl: z.string().optional(),
 });
 
 type CreateCourseInput = z.infer<typeof createCourseSchema>;
@@ -30,14 +27,9 @@ export default function NewCoursePage() {
   const router = useRouter();
   const [thumbFile, setThumbFile] = useState<File | null>(null);
   const [thumbUrl, setThumbUrl] = useState('');
-  const [thumbFile, setThumbFile] = useState<File | null>(null);
-  const [thumbUrl, setThumbUrl] = useState('');
-  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<CreateCourseInput>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreateCourseInput>({
     resolver: zodResolver(createCourseSchema) as any,
-    defaultValues: {
-      discount: 0,
-      discountQuantity: 0,
-    },
+    defaultValues: { discount: 0, discountQuantity: 0 },
   });
 
   const onSubmit = async (data: CreateCourseInput) => {
@@ -53,11 +45,9 @@ export default function NewCoursePage() {
       } else if (thumbUrl) {
         formData.append('thumbnailUrl', thumbUrl);
       }
-
       await api.post('/courses', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-
       toast.success('Course created!');
       router.push('/admin/courses');
     } catch (err: any) {
@@ -71,11 +61,8 @@ export default function NewCoursePage() {
         <h1 className="text-3xl font-bold">New Course</h1>
         <p className="text-muted-foreground mt-1">Create a new course</p>
       </div>
-
       <Card>
-        <CardHeader>
-          <CardTitle>Course Details</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Course Details</CardTitle></CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-1">
@@ -83,7 +70,6 @@ export default function NewCoursePage() {
               <Input {...register('title')} placeholder="e.g. Introduction to React" />
               {errors.title && <p className="text-sm text-red-500">{errors.title.message}</p>}
             </div>
-
             <div className="space-y-1">
               <Label>Description</Label>
               <textarea
@@ -93,7 +79,6 @@ export default function NewCoursePage() {
               />
               {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
             </div>
-
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-1">
                 <Label>Price ($)</Label>
@@ -111,9 +96,7 @@ export default function NewCoursePage() {
                 {errors.discountQuantity && <p className="text-sm text-red-500">{errors.discountQuantity.message}</p>}
               </div>
             </div>
-
             <ThumbnailInput onFileSelect={setThumbFile} onUrlChange={setThumbUrl} />
-
             <div className="flex gap-3 pt-2">
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create Course'}
